@@ -41,4 +41,23 @@ class PolygonService extends Controller {
   // 200m = 1*200/111000 dg = 0.00180180180
   def toDegrees(meters: Double) = meters * (1.0 / 111000.0)
 
+
+  def offsetPolygon = Action(parse.json) { req =>
+    req.body.asOpt[models.Polygon].map { polygon =>
+      try {
+        val coordinates = polygon.points.map { point => new Coordinate(point.lat, point.long) }
+        val polygonGeom = geometryFactory.createPolygon(coordinates);
+        val geom = polygonGeom.buffer(toDegrees(polygon.offset))
+        val simplified = TopologyPreservingSimplifier.simplify(geom, toDegrees(5))
+        Ok(
+          Json.toJson(ResponseData("success",
+            Some(simplified.getCoordinates.map(coord => Array(coord.x, coord.y)))
+          ))
+        )
+      } catch {
+        case _: Throwable => failed
+      }
+    }.getOrElse(failed)
+  }
+
 }

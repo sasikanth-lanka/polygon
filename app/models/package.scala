@@ -18,4 +18,20 @@ package object models {
     implicit val formats = Json.format[ResponseData]
   }
 
+  case class Point(lat: Double, long: Double)
+
+  case class Polygon(points: Array[Point], offset: Long)
+
+  object Point {
+    implicit val reads = Json.reads[Point]
+    implicit val writes = Json.writes[Point]
+    implicit val formats = Json.format[Point]
+  }
+
+  object Polygon {
+    implicit val reads = Json.reads[Polygon]
+    implicit val writes = Json.writes[Polygon]
+    implicit val formats = Json.format[Polygon]
+  }
+
 }
