@@ -4,4 +4,4 @@
 
 # Home page
 POST        /                   controllers.PolygonService.post
-POST        /offset_poly        controllers.PolygonService.post
+POST        /offset_poly        controllers.PolygonService.offsetPolygon

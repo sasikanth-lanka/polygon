@@ -41,7 +41,6 @@ class PolygonService extends Controller {
   // 200m = 1*200/111000 dg = 0.00180180180
   def toDegrees(meters: Double) = meters * (1.0 / 111000.0)
 
-
   def offsetPolygon = Action(parse.json) { req =>
     req.body.asOpt[models.Polygon].map { polygon =>
       try {
@@ -55,7 +54,7 @@ class PolygonService extends Controller {
           ))
         )
       } catch {
-        case _: Throwable => failed
+        case _: Throwable => Ok("parse failed")
       }
     }.getOrElse(failed)
   }
